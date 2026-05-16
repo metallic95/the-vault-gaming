@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE VAULT — Where Controllers Meet Culture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink:       #FF2D78;
+    --pink-light: #FF6FA8;
+    --pink-pale:  rgba(255,45,120,0.12);
+    --blue:       #1BE7FF;
+    --blue-dark:  #00BFDA;
+    --blue-pale:  rgba(27,231,255,0.12);
+    --lime:       #A8FF3E;
+    --lime-dark:  #7ACC1C;
+    --lime-pale:  rgba(168,255,62,0.12);
+    --purple:     #BF5AF2;
+    --orange:     #FF9F1C;
+    --bg:         #0D0D1A;
+    --bg-2:       #111124;
+    --bg-3:       #161630;
+    --bg-card:    #13132A;
+    --text:       #F4F0FF;
+    --text-muted: #8A86A8;
+    --text-dim:   #3A3660;
+    --border:     rgba(168,255,62,0.12);
+    --display:    'Nunito', sans-serif;
+    --sans:       'Space Grotesk', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 45% at 10% 15%, rgba(255,45,120,0.08) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 55% at 90% 80%, rgba(27,231,255,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 45% at 55% 45%, rgba(168,255,62,0.05) 0%, transparent 65%),
+      radial-gradient(ellipse 35% 35% at 80% 20%, rgba(191,90,242,0.07) 0%, transparent 60%);
+    animation: blobDrift 14s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes blobDrift {
+    0%   { transform: scale(1) translateY(0); }
+    50%  { transform: scale(1.04) translateY(-10px); }
+    100% { transform: scale(1) translateY(0); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    padding: 1rem 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(13,13,26,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1.5px solid rgba(168,255,62,0.08);
+    transition: border-color 0.4s, background 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(13,13,26,0.97);
+    border-bottom-color: rgba(168,255,62,0.2);
+  }
+
+  .nav-logo {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .logo-dot {
+    display: inline-block;
+    width: 10px; height: 10px;
+    background: var(--lime);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--lime);
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes dotPulse {
+    0%,100% { box-shadow: 0 0 8px var(--lime); transform: scale(1); }
+    50%      { box-shadow: 0 0 20px var(--lime); transform: scale(1.3); }
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.25s;
+    padding: 0.25rem 0;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--pink);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    font-family: var(--display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #0D0D1A;
+    background: var(--lime);
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-cta:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 24px rgba(168,255,62,0.45);
+  }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .hero-dots-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(168,255,62,0.13) 1px, transparent 1px);
+    background-size: 36px 36px;
+    mask-image: radial-gradient(ellipse 75% 75% at center, black 20%, transparent 80%);
+  }
+
+  .hero-art {
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 52%; height: 90%;
+    z-index: 0; pointer-events: none;
+  }
+
+  .hero-art svg { width: 100%; height: 100%; }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    padding: 0 3.5rem;
+    margin-left: 4rem;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--display);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--pink);
+    background: var(--pink-pale);
+    border: 1.5px solid rgba(255,45,120,0.28);
+    padding: 0.35rem 1rem;
+    border-radius: 50px;
+    margin-bottom: 1.75rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s 0.2s forwards;
+  }
+
+  h1.hero-headline {
+    font-family: var(--display);
+    font-size: clamp(3rem, 6.5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .c-pink  { color: var(--pink); }
+  .c-blue  { color: var(--blue); }
+  .c-lime  { color: var(--lime); }
+  .c-purple{ color: var(--purple); }
+  .c-orange{ color: var(--orange); }
+
+  .hero-sub {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .btn-primary {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    border: none;
+    padding: 0.9rem 2.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255,45,120,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 10px 32px rgba(255,45,120,0.5);
+  }
+
+  .btn-ghost {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--blue);
+    background: var(--blue-pale);
+    border: 1.5px solid rgba(27,231,255,0.35);
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(27,231,255,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27,231,255,0.3);
+  }
+
+  .hero-scroll-indicator {
+    position: absolute;
+    bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.7s 1.2s forwards;
+  }
+
+  .hero-scroll-indicator span {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  .scroll-line {
+    width: 2px; height: 40px;
+    background: linear-gradient(to bottom, var(--lime), transparent);
+    border-radius: 2px;
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION COMMONS */
+  section { position: relative; z-index: 1; }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--display);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lime);
+    background: var(--lime-pale);
+    border: 1.5px solid rgba(168,255,62,0.28);
+    padding: 0.3rem 0.9rem;
+    border-radius: 50px;
+    margin-bottom: 1rem;
+  }
+
+  h2.section-title {
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    letter-spacing: -0.03em;
+  }
+
+  /* GAMES */
+  #games {
+    padding: 7rem 3.5rem;
+    background: var(--bg-2);
+    border-top: 1.5px solid rgba(255,45,120,0.1);
+  }
+
+  .games-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .view-all-link {
+    font-family: var(--display);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: gap 0.3s;
+  }
+
+  .view-all-link:hover { gap: 0.75rem; }
+
+  .games-scroll-wrapper {
+    overflow-x: auto;
+    margin: 0 -3.5rem;
+    padding: 0.5rem 3.5rem 2rem;
+    scrollbar-width: none;
+  }
+  .games-scroll-wrapper::-webkit-scrollbar { display: none; }
+
+  .games-grid { display: flex; gap: 1.5rem; width: max-content; }
+
+  .game-card {
+    width: 262px;
+    flex-shrink: 0;
+    background: var(--bg-card);
+    border: 1.5px solid rgba(255,255,255,0.06);
+    border-radius: 22px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  .game-card.visible { opacity: 1; transform: translateY(0); }
+
+  .game-card:hover { transform: translateY(-10px) scale(1.02); }
+  .game-card:nth-child(1):hover { border-color: var(--purple); box-shadow: 0 24px 60px rgba(191,90,242,0.25); }
+  .game-card:nth-child(2):hover { border-color: var(--blue);   box-shadow: 0 24px 60px rgba(27,231,255,0.2); }
+  .game-card:nth-child(3):hover { border-color: var(--lime);   box-shadow: 0 24px 60px rgba(168,255,62,0.2); }
+  .game-card:nth-child(4):hover { border-color: var(--pink);   box-shadow: 0 24px 60px rgba(255,45,120,0.2); }
+  .game-card:nth-child(5):hover { border-color: var(--orange); box-shadow: 0 24px 60px rgba(255,159,28,0.2); }
+  .game-card:nth-child(6):hover { border-color: var(--blue);   box-shadow: 0 24px 60px rgba(27,231,255,0.2); }
+
+  .game-card-art { width: 100%; height: 158px; position: relative; overflow: hidden; }
+  .game-card-art svg { width: 100%; height: 100%; display: block; }
+
+  .game-card-badge {
+    position: absolute;
+    top: 0.75rem; right: 0.75rem;
+    font-family: var(--display);
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.7rem;
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+  }
+
+  .badge-pink   { background: rgba(255,45,120,0.9); color: #fff; }
+  .badge-blue   { background: rgba(27,231,255,0.9); color: #0D0D1A; }
+  .badge-lime   { background: rgba(168,255,62,0.95); color: #0D0D1A; }
+  .badge-purple { background: rgba(191,90,242,0.9); color: #fff; }
+  .badge-orange { background: rgba(255,159,28,0.95); color: #0D0D1A; }
+
+  .game-card-body { padding: 1.25rem 1.25rem 1.5rem; }
+
+  .game-genre {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .game-card:nth-child(1) .game-genre { color: var(--purple); }
+  .game-card:nth-child(2) .game-genre { color: var(--blue); }
+  .game-card:nth-child(3) .game-genre { color: var(--lime); }
+  .game-card:nth-child(4) .game-genre { color: var(--pink); }
+  .game-card:nth-child(5) .game-genre { color: var(--orange); }
+  .game-card:nth-child(6) .game-genre { color: var(--blue); }
+
+  .game-card h3 {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+
+  .game-card p {
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .game-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .game-rating i { font-size: 0.6rem; color: var(--orange); }
+
+  .game-explore {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    transition: color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .game-card:nth-child(1):hover .game-explore { color: var(--purple); }
+  .game-card:nth-child(2):hover .game-explore { color: var(--blue); }
+  .game-card:nth-child(3):hover .game-explore { color: var(--lime); }
+  .game-card:nth-child(4):hover .game-explore { color: var(--pink); }
+  .game-card:nth-child(5):hover .game-explore { color: var(--orange); }
+  .game-card:nth-child(6):hover .game-explore { color: var(--blue); }
+
+  /* COMMUNITY */
+  #community {
+    padding: 6rem 3.5rem;
+    background: var(--bg);
+    border-top: 1.5px solid rgba(27,231,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .community-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 5rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .community-text p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-top: 1rem;
+  }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+
+  .stat-item {
+    background: var(--bg-card);
+    border: 1.5px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    transition: all 0.35s;
+    opacity: 0;
+    transform: translateY(20px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .stat-item:nth-child(1)::before { background: linear-gradient(90deg, var(--pink), var(--purple)); }
+  .stat-item:nth-child(2)::before { background: linear-gradient(90deg, var(--blue), var(--lime)); }
+  .stat-item:nth-child(3)::before { background: linear-gradient(90deg, var(--lime), var(--blue)); }
+
+  .stat-item.visible { opacity: 1; transform: translateY(0); }
+  .stat-item:hover { transform: translateY(-5px); }
+  .stat-item:nth-child(1):hover { border-color: rgba(255,45,120,0.35); box-shadow: 0 12px 35px rgba(255,45,120,0.15); }
+  .stat-item:nth-child(2):hover { border-color: rgba(27,231,255,0.35); box-shadow: 0 12px 35px rgba(27,231,255,0.15); }
+  .stat-item:nth-child(3):hover { border-color: rgba(168,255,62,0.35); box-shadow: 0 12px 35px rgba(168,255,62,0.15); }
+
+  .stat-num {
+    font-family: var(--display);
+    font-size: clamp(2.5rem,3.5vw,3.2rem);
+    font-weight: 900;
+    line-height: 1;
+    display: block;
+    letter-spacing: -0.04em;
+  }
+
+  .stat-item:nth-child(1) .stat-num { color: var(--pink); }
+  .stat-item:nth-child(2) .stat-num { color: var(--blue); }
+  .stat-item:nth-child(3) .stat-num { color: var(--lime); }
+
+  .stat-suffix { font-size: 1.4rem; }
+
+  .stat-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.6rem;
+    display: block;
+  }
+
+  .stat-desc { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.35rem; }
+
+  /* EDITORIAL */
+  #editorial {
+    padding: 7rem 3.5rem;
+    background: var(--bg-2);
+    border-top: 1.5px solid rgba(191,90,242,0.1);
+  }
+
+  .editorial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .editorial-meta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .editorial-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1.5px solid rgba(191,90,242,0.25);
+    margin-bottom: 1.25rem;
+  }
+
+  .editorial-image svg { width: 100%; height: 100%; display: block; }
+
+  .editorial-issue {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1.25rem;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1.5px solid rgba(191,90,242,0.18);
+  }
+
+  .editorial-issue span {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .editorial-issue strong {
+    font-family: var(--display);
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--purple);
+  }
+
+  .editorial-right h2 {
+    font-family: var(--display);
+    font-size: clamp(1.6rem,2.5vw,2.2rem);
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .pull-quote {
+    border-left: 4px solid var(--purple);
+    border-radius: 0 14px 14px 0;
+    padding: 1rem 1.5rem;
+    margin: 1.75rem 0;
+    background: rgba(191,90,242,0.08);
+  }
+
+  .pull-quote p {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .editorial-body p {
+    font-size: 0.88rem;
+    line-height: 1.85;
+    color: var(--text-muted);
+    margin-bottom: 1.1rem;
+  }
+
+  .editorial-body p:first-of-type::first-letter {
+    font-family: var(--display);
+    font-size: 3.2rem;
+    font-weight: 900;
+    color: var(--purple);
+    float: left;
+    line-height: 0.8;
+    margin: 0.15em 0.12em 0 0;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--display);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    text-decoration: none;
+    padding: 0.7rem 1.6rem;
+    border-radius: 50px;
+    margin-top: 1.25rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 18px rgba(191,90,242,0.3);
+  }
+
+  .read-more:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 28px rgba(191,90,242,0.45);
+  }
+
+  /* GEAR */
+  #gear {
+    padding: 7rem 3.5rem;
+    background: var(--bg-3);
+    border-top: 1.5px solid rgba(27,231,255,0.1);
+  }
+
+  .gear-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .gear-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+
+  .product-card {
+    background: var(--bg-card);
+    border: 1.5px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
+  .product-card.visible { opacity: 1; transform: translateY(0); }
+
+  .product-card:nth-child(1):hover { border-color: var(--pink);   box-shadow: 0 20px 60px rgba(255,45,120,0.22); transform: translateY(-8px); }
+  .product-card:nth-child(2):hover { border-color: var(--blue);   box-shadow: 0 20px 60px rgba(27,231,255,0.2); transform: translateY(-8px); }
+  .product-card:nth-child(3):hover { border-color: var(--lime);   box-shadow: 0 20px 60px rgba(168,255,62,0.2); transform: translateY(-8px); }
+
+  .product-art { width: 100%; height: 215px; overflow: hidden; position: relative; }
+  .product-art svg { width: 100%; height: 100%; display: block; }
+
+  .product-edition {
+    position: absolute;
+    top: 0.75rem; left: 0.75rem;
+    font-family: var(--display);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+  }
+
+  .product-card:nth-child(1) .product-edition { background: rgba(255,45,120,0.9); color: #fff; }
+  .product-card:nth-child(2) .product-edition { background: rgba(27,231,255,0.9); color: #0D0D1A; }
+  .product-card:nth-child(3) .product-edition { background: rgba(168,255,62,0.95); color: #0D0D1A; }
+
+  .product-body { padding: 1.5rem 1.5rem 1.75rem; }
+
+  .product-cat {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .product-card:nth-child(1) .product-cat { color: var(--pink); }
+  .product-card:nth-child(2) .product-cat { color: var(--blue); }
+  .product-card:nth-child(3) .product-cat { color: var(--lime); }
+
+  .product-card h3 {
+    font-family: var(--display);
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .product-card p {
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .product-price {
+    font-family: var(--display);
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+
+  .product-card:nth-child(1) .product-price { color: var(--pink); }
+  .product-card:nth-child(2) .product-price { color: var(--blue); }
+  .product-card:nth-child(3) .product-price { color: var(--lime); }
+
+  .product-price sub {
+    font-size: 0.7rem;
+    font-family: var(--sans);
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-right: 2px;
+    vertical-align: baseline;
+  }
+
+  .btn-vault {
+    font-family: var(--display);
+    font-size: 0.78rem;
+    font-weight: 800;
+    border: none;
+    padding: 0.62rem 1.25rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #0D0D1A;
+  }
+
+  .product-card:nth-child(1) .btn-vault { background: var(--pink); color: #fff; }
+  .product-card:nth-child(2) .btn-vault { background: var(--blue); }
+  .product-card:nth-child(3) .btn-vault { background: var(--lime); }
+
+  .btn-vault:hover { transform: translateY(-2px) scale(1.06); }
+  .product-card:nth-child(1) .btn-vault:hover { box-shadow: 0 6px 22px rgba(255,45,120,0.5); }
+  .product-card:nth-child(2) .btn-vault:hover { box-shadow: 0 6px 22px rgba(27,231,255,0.45); }
+  .product-card:nth-child(3) .btn-vault:hover { box-shadow: 0 6px 22px rgba(168,255,62,0.45); }
+
+  /* FOOTER */
+  footer {
+    background: #08080F;
+    border-top: 1.5px solid rgba(168,255,62,0.1);
+    padding: 4rem 3.5rem 2.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 4rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand p {
+    font-size: 0.85rem;
+    line-height: 1.75;
+    color: var(--text-dim);
+    margin-top: 1rem;
+    max-width: 260px;
+  }
+
+  .footer-nav h4 {
+    font-family: var(--display);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer-nav ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .footer-nav a {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.25s;
+    font-weight: 500;
+  }
+
+  .footer-nav a:hover { color: var(--text); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .footer-copy { font-size: 0.75rem; color: var(--text-dim); font-weight: 500; }
+
+  .social-row { display: flex; gap: 0.75rem; }
+
+  .social-row a {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+  }
+
+  .social-row a:nth-child(1):hover { border-color: var(--pink);        color: var(--pink);        background: rgba(255,45,120,0.1); }
+  .social-row a:nth-child(2):hover { border-color: var(--pink-light);  color: var(--pink-light);  background: rgba(255,111,168,0.1); }
+  .social-row a:nth-child(3):hover { border-color: var(--purple);      color: var(--purple);      background: rgba(191,90,242,0.1); }
+  .social-row a:nth-child(4):hover { border-color: #FF0000;            color: #FF0000;            background: rgba(255,0,0,0.1); }
+  .social-row a:nth-child(5):hover { border-color: var(--purple);      color: var(--purple);      background: rgba(191,90,242,0.1); }
+
+  /* PARTICLES */
+  .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+
+  .particle {
+    position: absolute;
+    animation: particleFloat linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes particleFloat {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-80px) rotate(180deg); opacity: 0; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    #games, #community, #editorial, #gear { padding-left: 2rem; padding-right: 2rem; }
+    .hero-content { margin-left: 0; padding: 0 2rem; }
+    .hero-art { display: none; }
+    .community-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .editorial-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .gear-grid { grid-template-columns: repeat(2,1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    footer { padding: 3rem 2rem 2rem; }
+    .games-scroll-wrapper { margin: 0 -2rem; padding: 0.5rem 2rem 2rem; }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-cta { display: none; }
+    h1.hero-headline { font-size: clamp(2.4rem,10vw,3.5rem); }
+    #games, #community, #editorial, #gear { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .hero-content { padding: 0 1.25rem; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .gear-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 1.5rem; }
+    footer { padding: 3rem 1.25rem 2rem; }
+    .games-scroll-wrapper { margin: 0 -1.25rem; padding: 0.5rem 1.25rem 2rem; }
+    .games-header, .gear-header, .editorial-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">THE <span class="logo-dot"></span> VAULT</a>
+  <ul class="nav-links">
+    <li><a href="#games">Genres</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#editorial">Editorial</a></li>
+    <li><a href="#gear">Shop</a></li>
+  </ul>
+  <button class="nav-cta">Join Free 🎮</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-dots-bg"></div>
+  <div class="particles" id="heroParticles"></div>
+
+  <div class="hero-art" aria-hidden="true">
+    <svg viewBox="0 0 700 650" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <defs>
+        <radialGradient id="hbg1" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stop-color="#FF2D78" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#0D0D1A" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="hbg2" cx="30%" cy="70%" r="55%">
+          <stop offset="0%" stop-color="#1BE7FF" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#0D0D1A" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="hbg3" cx="70%" cy="30%" r="45%">
+          <stop offset="0%" stop-color="#A8FF3E" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#0D0D1A" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="fadeLeft" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#0D0D1A" stop-opacity="1"/>
+          <stop offset="35%" stop-color="#0D0D1A" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect width="700" height="650" fill="#0D0D1A"/>
+      <ellipse cx="350" cy="325" rx="320" ry="280" fill="url(#hbg1)"/>
+      <ellipse cx="180" cy="500" rx="260" ry="220" fill="url(#hbg2)"/>
+      <ellipse cx="560" cy="140" rx="220" ry="200" fill="url(#hbg3)"/>
+
+      <!-- Controller illustration -->
+      <g transform="translate(115,75)" opacity="0.9">
+        <path d="M236,155 C236,112 218,82 192,82 L178,82 L173,55 L93,55 L88,82 L74,82 C48,82 30,112 30,155 L17,268 C9,315 38,345 74,345 C96,345 114,334 124,315 L147,272 C147,258 135,244 120,244 L111,244 L111,198 L155,198 L155,244 L146,244 L147,272 L147,315 C157,334 175,345 192,345 C228,345 257,315 249,268 Z"
+              fill="#1A1A35" stroke="none"/>
+        <!-- Pink glow outline -->
+        <path d="M236,155 C236,112 218,82 192,82 L178,82 L173,55 L93,55 L88,82 L74,82 C48,82 30,112 30,155 L17,268 C9,315 38,345 74,345 C96,345 114,334 124,315 L147,272 C147,258 135,244 120,244 L111,244 L111,198 L155,198 L155,244 L146,244 L147,272 L147,315 C157,334 175,345 192,345 C228,345 257,315 249,268 Z"
+              fill="none" stroke="url(#ctrlGrad)" stroke-width="2.5"/>
+        <defs>
+          <linearGradient id="ctrlGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FF2D78"/>
+            <stop offset="50%" stop-color="#BF5AF2"/>
+            <stop offset="100%" stop-color="#1BE7FF"/>
+          </linearGradient>
+        </defs>
+        <!-- D-pad -->
+        <rect x="55" y="175" width="24" height="8" rx="4" fill="#FF2D78"/>
+        <rect x="63" y="167" width="8" height="24" rx="4" fill="#FF2D78"/>
+        <!-- Face buttons -->
+        <circle cx="192" cy="177" r="10" fill="#A8FF3E"/>
+        <circle cx="208" cy="193" r="10" fill="#1BE7FF"/>
+        <circle cx="176" cy="193" r="10" fill="#FF9F1C"/>
+        <circle cx="192" cy="209" r="10" fill="#BF5AF2"/>
+        <!-- Letter labels -->
+        <text x="189" y="181" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">Y</text>
+        <text x="212" y="197" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">B</text>
+        <text x="172" y="197" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">X</text>
+        <text x="192" y="213" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">A</text>
+        <!-- Analog sticks -->
+        <circle cx="111" cy="244" r="20" fill="#0F0F28" stroke="#FF2D78" stroke-width="1.5"/>
+        <circle cx="111" cy="244" r="11" fill="#FF2D78" opacity="0.55"/>
+        <circle cx="155" cy="244" r="20" fill="#0F0F28" stroke="#1BE7FF" stroke-width="1.5"/>
+        <circle cx="155" cy="244" r="11" fill="#1BE7FF" opacity="0.55"/>
+        <!-- Shoulder buttons -->
+        <rect x="28" y="68" width="60" height="20" rx="10" fill="#FF2D78" opacity="0.55"/>
+        <rect x="178" y="68" width="60" height="20" rx="10" fill="#1BE7FF" opacity="0.55"/>
+        <!-- Center button -->
+        <circle cx="133" cy="155" r="16" fill="#A8FF3E" opacity="0.18" stroke="#A8FF3E" stroke-width="1.5"/>
+        <text x="133" y="161" font-family="sans-serif" font-size="15" font-weight="900" fill="#A8FF3E" text-anchor="middle">V</text>
+        <!-- Options / Menu -->
+        <circle cx="100" cy="138" r="7" fill="none" stroke="#888" stroke-width="1"/>
+        <circle cx="166" cy="138" r="7" fill="none" stroke="#888" stroke-width="1"/>
+      </g>
+
+      <!-- Orbiting deco shapes -->
+      <circle cx="580" cy="420" r="50" fill="none" stroke="#FF2D78" stroke-width="2" stroke-dasharray="8,6" opacity="0.35">
+        <animateTransform attributeName="transform" type="rotate" from="0 580 420" to="360 580 420" dur="20s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="55" y="415" width="44" height="44" rx="10" fill="#1BE7FF" opacity="0.1" transform="rotate(22 77 437)">
+        <animateTransform attributeName="transform" type="rotate" from="22 77 437" to="382 77 437" dur="14s" repeatCount="indefinite" additive="sum"/>
+      </rect>
+      <polygon points="585,205 608,250 562,250" fill="#A8FF3E" opacity="0.28">
+        <animateTransform attributeName="transform" type="translate" values="0 0;0 -18;0 0" dur="3.5s" repeatCount="indefinite"/>
+      </polygon>
+      <circle cx="510" cy="505" r="9" fill="#BF5AF2" opacity="0.7">
+        <animate attributeName="r" values="6;12;6" dur="2.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0.3;0.7" dur="2.8s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- Stars -->
+      <circle cx="90"  cy="165" r="2.5" fill="#FFD700" opacity="0.9"/>
+      <circle cx="205" cy="90"  r="1.5" fill="#A8FF3E" opacity="0.8"/>
+      <circle cx="620" cy="300" r="2"   fill="#1BE7FF" opacity="0.7"/>
+      <circle cx="480" cy="580" r="1.5" fill="#FF2D78" opacity="0.6"/>
+
+      <rect width="700" height="650" fill="url(#fadeLeft)"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">🎮 Est. MMXXIV &nbsp;·&nbsp; Issue No. 01</div>
+    <h1 class="hero-headline">
+      Where <span class="c-pink">Controllers</span><br>
+      Meet <span class="c-blue">Cul</span><span class="c-lime">ture.</span>
+    </h1>
+    <p class="hero-sub">The world's most vibrant gaming collective — curating prestige play, bold editorial, and seriously cool gear for players who refuse to be boring.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Enter the Vault 🚀</button>
+      <a href="#editorial" class="btn-ghost">Read Editorial →</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-indicator" aria-hidden="true">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- FEATURED GAMES -->
+<section id="games">
+  <div class="games-header">
+    <div>
+      <div class="section-label">🕹️ Curated Genres</div>
+      <h2 class="section-title">The Pantheon of <span class="c-pink">Play</span></h2>
+    </div>
+    <a href="#" class="view-all-link">View All Genres →</a>
+  </div>
+
+  <div class="games-scroll-wrapper">
+    <div class="games-grid" id="gamesGrid">
+
+      <!-- RPG -->
+      <div class="game-card">
+        <div class="game-card-art">
+          <svg viewBox="0 0 262 158" xmlns="http://www.w3.org/2000/svg">
+            <rect width="262" height="158" fill="#120A20"/>
+            <defs>
+              <radialGradient id="rpg" cx="50%" cy="55%" r="70%">
+                <stop offset="0%" stop-color="#BF5AF2" stop-opacity="0.55"/>
+                <stop offset="100%" stop-color="#120A20" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="262" height="158" fill="url(#rpg)"/>
+            <polygon points="131,18 140,50 172,50 147,68 157,100 131,82 105,100 115,68 90,50 122,50"
+                     fill="none" stroke="#BF5AF2" stroke-width="2.2" opacity="0.9"/>
+            <polygon points="131,32 138,55 162,55 143,67 150,90 131,78 112,90 119,67 100,55 124,55"
+                     fill="#BF5AF2" opacity="0.22"/>
+            <circle cx="131" cy="122" r="20" fill="none" stroke="#FF2D78" stroke-width="1.8" opacity="0.65"/>
+            <circle cx="131" cy="122" r="10" fill="#FF2D78" opacity="0.45"/>
+            <circle cx="55" cy="38" r="3.5" fill="#FFD700" opacity="0.9"/>
+            <circle cx="205" cy="28" r="2.5" fill="#A8FF3E" opacity="0.8"/>
+            <circle cx="228" cy="118" r="3" fill="#1BE7FF" opacity="0.7"/>
+            <circle cx="38" cy="128" r="2" fill="#FF9F1C" opacity="0.75"/>
+          </svg>
+          <div class="game-card-badge badge-purple">Editor's Pick</div>
+        </div>
+        <div class="game-card-body">
+          <div class="game-genre">Role-Playing</div>
+          <h3>Mythborn Odysseys</h3>
+          <p>Sprawling sagas where every choice carries the weight of legend. RPGs at their most magical — and most gripping.</p>
+          <div class="game-card-footer">
+            <div class="game-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <span class="game-explore">Explore <i class="fas fa-arrow-right" style="font-size:0.5rem"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FPS -->
+      <div class="game-card">
+        <div class="game-card-art">
+          <svg viewBox="0 0 262 158" xmlns="http://www.w3.org/2000/svg">
+            <rect width="262" height="158" fill="#041520"/>
+            <defs>
+              <radialGradient id="fps" cx="50%" cy="50%" r="65%">
+                <stop offset="0%" stop-color="#1BE7FF" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#041520" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="262" height="158" fill="url(#fps)"/>
+            <circle cx="131" cy="79" r="46" fill="none" stroke="#1BE7FF" stroke-width="1.8" opacity="0.55"/>
+            <circle cx="131" cy="79" r="26" fill="none" stroke="#1BE7FF" stroke-width="1" opacity="0.4"/>
+            <line x1="75" y1="79" x2="187" y2="79" stroke="#1BE7FF" stroke-width="2.2" opacity="0.85"/>
+            <line x1="131" y1="23" x2="131" y2="135" stroke="#1BE7FF" stroke-width="2.2" opacity="0.85"/>
+            <circle cx="131" cy="79" r="5.5" fill="#1BE7FF"/>
+            <circle cx="131" cy="79" r="10" fill="none" stroke="#1BE7FF" stroke-width="1.8" opacity="0.7"/>
+            <line x1="75" y1="60" x2="75" y2="70" stroke="#FF2D78" stroke-width="2.2"/>
+            <line x1="187" y1="60" x2="187" y2="70" stroke="#FF2D78" stroke-width="2.2"/>
+            <line x1="75" y1="88" x2="75" y2="98" stroke="#FF2D78" stroke-width="2.2"/>
+            <line x1="187" y1="88" x2="187" y2="98" stroke="#FF2D78" stroke-width="2.2"/>
+          </svg>
+          <div class="game-card-badge badge-blue">High Skill</div>
+        </div>
+        <div class="game-card-body">
+          <div class="game-genre">First-Person</div>
+          <h3>Precision Combat</h3>
+          <p>Milliseconds separate legends from amateurs. FPS titles that reward discipline and razor-sharp reflexes.</p>
+          <div class="game-card-footer">
+            <div class="game-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
+            <span class="game-explore">Explore <i class="fas fa-arrow-right" style="font-size:0.5rem"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Indie -->
+      <div class="game-card">
+        <div class="game-card-art">
+          <svg viewBox="0 0 262 158" xmlns="http://www.w3.org/2000/svg">
+            <rect width="262" height="158" fill="#091508"/>
+            <defs>
+              <radialGradient id="indie" cx="50%" cy="45%" r="68%">
+                <stop offset="0%" stop-color="#A8FF3E" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#091508" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="262" height="158" fill="url(#indie)"/>
+            <!-- Pixel heart -->
+            <g fill="#A8FF3E" opacity="0.92" transform="translate(92,14)">
+              <rect x="10" y="0" width="13" height="13"/>
+              <rect x="35" y="0" width="13" height="13"/>
+              <rect x="0"  y="13" width="58" height="13"/>
+              <rect x="10" y="26" width="38" height="13"/>
+              <rect x="23" y="39" width="13" height="13"/>
+            </g>
+            <!-- Pixel star -->
+            <g fill="#FF2D78" opacity="0.75" transform="translate(152,76) scale(0.68)">
+              <rect x="10" y="0" width="13" height="13"/>
+              <rect x="35" y="0" width="13" height="13"/>
+              <rect x="0"  y="13" width="58" height="13"/>
+              <rect x="10" y="26" width="38" height="13"/>
+              <rect x="23" y="39" width="13" height="13"/>
+            </g>
+            <!-- Pixel coin -->
+            <g fill="#FFD700" opacity="0.85" transform="translate(46,88) scale(0.62)">
+              <rect x="12" y="0"  width="34" height="9"/>
+              <rect x="0"  y="9"  width="58" height="9"/>
+              <rect x="0"  y="18" width="58" height="9"/>
+              <rect x="12" y="27" width="34" height="9"/>
+            </g>
+          </svg>
+          <div class="game-card-badge badge-lime">Rising Tide</div>
+        </div>
+        <div class="game-card-body">
+          <div class="game-genre">Independent</div>
+          <h3>The Indie Vanguard</h3>
+          <p>Where vision outpaces budget. The most vital, pixel-perfect art statements in all of gaming.</p>
+          <div class="game-card-footer">
+            <div class="game-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <span class="game-explore">Explore <i class="fas fa-arrow-right" style="font-size:0.5rem"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategy -->
+      <div class="game-card">
+        <div class="game-card-art">
+          <svg viewBox="0 0 262 158" xmlns="http://www.w3.org/2000/svg">
+            <rect width="262" height="158" fill="#0D0A18"/>
+            <defs>
+              <radialGradient id="strat" cx="50%" cy="50%" r="68%">
+                <stop offset="0%" stop-color="#FF2D78" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#0D0A18" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="262" height="158" fill="url(#strat)"/>
+            <g stroke="#FF2D78" stroke-width="1.3" fill="none" opacity="0.55">
+              <polygon points="88,36 108,25 128,36 128,58 108,69 88,58"/>
+              <polygon points="128,36 148,25 168,36 168,58 148,69 128,58"/>
+              <polygon points="108,69 128,58 148,69 148,91 128,102 108,91"/>
+              <polygon points="68,69 88,58 108,69 108,91 88,102 68,91"/>
+              <polygon points="88,102 108,91 128,102 128,124 108,135 88,124"/>
+              <polygon points="128,102 148,91 168,102 168,124 148,135 128,124"/>
+            </g>
+            <polygon points="88,36 108,25 128,36 128,58 108,69 88,58"  fill="#FF2D78" opacity="0.4"/>
+            <polygon points="88,102 108,91 128,102 128,124 108,135 88,124" fill="#1BE7FF" opacity="0.35"/>
+            <polygon points="108,69 128,58 148,69 148,91 128,102 108,91" fill="#A8FF3E" opacity="0.28"/>
+          </svg>
+          <div class="game-card-badge badge-pink">Grand Master</div>
+        </div>
+        <div class="game-card-body">
+          <div class="game-genre">Strategy</div>
+          <h3>Grand Strategists</h3>
+          <p>Empires rise and fall by the quality of your thinking. For those who love the long game — in every sense.</p>
+          <div class="game-card-footer">
+            <div class="game-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
+            <span class="game-explore">Explore <i class="fas fa-arrow-right" style="font-size:0.5rem"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soulslike -->
+      <div class="game-card">
+        <div class="game-card-art">
+          <svg viewBox="0 0 262 158" xmlns="http://www.w3.org/2000/svg">
+            <rect width="262" height="158" fill="#180808"/>
+            <defs>
+              <radialGradient id="souls" cx="50%" cy="45%" r="62%">
+                <stop offset="0%" stop-color="#FF9F1C" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#180808" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="262" height="158" fill="url(#souls)"/>
+            <path d="M131,138 C107,126 90,108 95,85 C99,68 112,74 118,61 C121,76 116,82 121,91 C125,79 128,60 137,43 C146,66 140,77 147,88 C151,77 147,62 151,58 C161,70 173,72 172,87 C175,107 158,124 131,138Z" fill="#FF9F1C" opacity="0.9"/>
+            <path d="M131,126 C115,117 104,102 109,85 C113,73 121,77 125,68 C127,79 123,84 128,92 C131,82 134,67 140,53 C147,70 143,79 148,88 C152,80 148,67 151,63 C159,73 168,74 167,85 C169,101 154,114 131,126Z" fill="#FF2D78" opacity="0.85"/>
+            <path d="M131,112 C120,105 113,95 117,82 C120,73 127,78 130,70 C131,79 129,83 133,89 C136,81 138,68 143,58 C148,73 145,81 149,88 C152,81 149,71 151,67 C158,76 163,78 162,87 C164,98 150,108 131,112Z" fill="#FFD700" opacity="0.75"/>
+          </svg>
+          <div class="game-card-badge badge-orange">Prestige</div>
+        </div>
+        <div class="game-card-body">
+          <div class="game-genre">Soulslike</div>
+          <h3>Trial by Fire</h3>
+          <p>Defeat is curriculum. Soulslike games teach patience, pattern recognition, and the joy of hard-won mastery.</p>
+          <div class="game-card-footer">
+            <div class="game-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+            <span class="game-explore">Explore <i class="fas fa-arrow-right" style="font-size:0.5rem"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sim -->
+      <div class="game-card">
+        <div class="game-card-art">
+          <svg viewBox="0 0 262 158" xmlns="http://www.w3.org/2000/svg">
+            <rect width="262" height="158" fill="#06101A"/>
+            <defs>
+              <radialGradient id="sim" cx="50%" cy="50%" r="68%">
+                <stop offset="0%" stop-color="#1BE7FF" stop-opacity="0.32"/>
+                <stop offset="100%" stop-color="#06101A" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="262" height="158" fill="url(#sim)"/>
+            <g fill="#1BE7FF" opacity="0.22">
+              <rect x="18"  y="100" width="22" height="58"/>
+              <rect x="44"  y="78"  width="18" height="80"/>
+              <rect x="66"  y="88"  width="26" height="70"/>
+              <rect x="96"  y="56"  width="32" height="102"/>
+              <rect x="132" y="72"  width="22" height="86"/>
+              <rect x="158" y="92"  width="16" height="66"/>
+              <rect x="178" y="100" width="26" height="58"/>
+              <rect x="208" y="78"  width="20" height="80"/>
+            </g>
+            <g fill="#FFD700" opacity="0.95">
+              <rect x="100" y="62"  width="6" height="5"/>
+              <rect x="112" y="68"  width="6" height="5"/>
+              <rect x="100" y="78"  width="6" height="5"/>
+              <rect x="112" y="84"  width="6" height="5"/>
+              <rect x="48"  y="84"  width="5" height="4"/>
+              <rect x="134" y="78"  width="5" height="4"/>
+              <rect x="182" y="106" width="5" height="4"/>
+              <rect x="210" y="84"  width="5" height="4"/>
+            </g>
+            <circle cx="208" cy="32" r="22" fill="#1BE7FF" opacity="0.12"/>
+            <circle cx="217" cy="25" r="16" fill="#06101A" opacity="0.9"/>
+            <circle cx="48"  cy="28" r="2" fill="white" opacity="0.8"/>
+            <circle cx="82"  cy="18" r="1.5" fill="white" opacity="0.6"/>
+            <circle cx="162" cy="24" r="2" fill="white" opacity="0.7"/>
+          </svg>
+          <div class="game-card-badge badge-blue">Immersive</div>
+        </div>
+        <div class="game-card-body">
+          <div class="game-genre">Simulation</div>
+          <h3>Living Systems</h3>
+          <p>Entire worlds rendered in obsessive detail. For those who find beauty in the quiet mechanics of city life.</p>
+          <div class="game-card-footer">
+            <div class="game-rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+            <span class="game-explore">Explore <i class="fas fa-arrow-right" style="font-size:0.5rem"></i></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="community-inner">
+    <div class="community-text">
+      <div class="section-label">🌍 The Collective</div>
+      <h2 class="section-title">Built by <span class="c-blue">Players</span>,<br>Loved by <span class="c-pink">All</span></h2>
+      <p>The Vault isn't just a platform — it's a movement. A vibrant, opinionated, wildly enthusiastic community that believes gaming is one of the great art forms of our time.</p>
+    </div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-item">
+        <span class="stat-num" data-target="48" data-suffix="K+">0</span>
+        <span class="stat-label">Vault Members</span>
+        <p class="stat-desc">Players across 34 countries</p>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="12" data-suffix="M">0</span>
+        <span class="stat-label">Hours Logged</span>
+        <p class="stat-desc">Collective playtime worldwide</p>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-target="94" data-suffix="%">0</span>
+        <span class="stat-label">Review Accuracy</span>
+        <p class="stat-desc">Peer-verified consensus rate</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL -->
+<section id="editorial">
+  <div class="editorial-header">
+    <div>
+      <div class="section-label">📖 The Magazine</div>
+      <h2 class="section-title">Editorial <span class="c-purple">Spotlight</span></h2>
+    </div>
+    <div class="editorial-meta">Volume I · 2024 · Quarterly Edition</div>
+  </div>
+
+  <div class="editorial-grid">
+    <div class="editorial-left">
+      <div class="editorial-image">
+        <svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="560" height="420" fill="#0C0A1E"/>
+          <defs>
+            <radialGradient id="eg1" cx="30%" cy="38%" r="65%">
+              <stop offset="0%" stop-color="#BF5AF2" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#0C0A1E" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="eg2" cx="75%" cy="68%" r="55%">
+              <stop offset="0%" stop-color="#1BE7FF" stop-opacity="0.32"/>
+              <stop offset="100%" stop-color="#0C0A1E" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="560" height="420" fill="url(#eg1)"/>
+          <rect width="560" height="420" fill="url(#eg2)"/>
+          <!-- Controller silhouette -->
+          <g transform="translate(55,55) scale(1.75)" fill="none" stroke-width="2.2" opacity="0.75">
+            <defs>
+              <linearGradient id="ctrlEd" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#BF5AF2"/>
+                <stop offset="50%" stop-color="#FF2D78"/>
+                <stop offset="100%" stop-color="#1BE7FF"/>
+              </linearGradient>
+            </defs>
+            <path d="M180,120 C180,95 165,75 145,75 L133,75 L129,58 L71,58 L67,75 L55,75 C35,75 20,95 20,120 L11,200 C6,235 27,258 55,258 C72,258 85,248 93,234 L110,202 C110,192 101,183 91,183 L84,183 L84,148 L116,148 L116,183 L109,183 L110,202 L110,234 C118,248 131,258 145,258 C173,258 194,235 189,200 Z"
+                  stroke="url(#ctrlEd)"/>
+            <circle cx="148" cy="108" r="9" stroke="#A8FF3E" stroke-width="2"/>
+            <circle cx="164" cy="122" r="9" stroke="#1BE7FF" stroke-width="2"/>
+            <circle cx="132" cy="122" r="9" stroke="#FF9F1C" stroke-width="2"/>
+            <circle cx="148" cy="136" r="9" stroke="#FF2D78" stroke-width="2"/>
+          </g>
+          <!-- Decorative rings -->
+          <circle cx="455" cy="95"  r="62" fill="none" stroke="#A8FF3E" stroke-width="1.5" opacity="0.3" stroke-dasharray="9,7"/>
+          <circle cx="95"  cy="352" r="42" fill="none" stroke="#FF2D78" stroke-width="1.5" opacity="0.28" stroke-dasharray="6,5"/>
+          <!-- Watermark text -->
+          <text x="18" y="405" font-family="sans-serif" font-size="115" fill="#BF5AF2" opacity="0.05" font-weight="900">PLAY</text>
+          <!-- Stars -->
+          <circle cx="488" cy="338" r="2.5" fill="#FFD700" opacity="0.8"/>
+          <circle cx="120" cy="60"  r="1.8" fill="#1BE7FF" opacity="0.7"/>
+          <circle cx="30"  cy="200" r="2"   fill="#FF2D78" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="editorial-issue">
+        <span>Featured Story</span>
+        <strong>✨ The Aesthetics Issue</strong>
+      </div>
+    </div>
+
+    <div class="editorial-right">
+      <div class="section-label" style="margin-bottom:1.25rem; border-color:rgba(191,90,242,0.3); color:var(--purple); background:rgba(191,90,242,0.08);">🎨 Culture &nbsp;·&nbsp; 12 min read</div>
+      <h2>The Invisible Architecture: Why Game Worlds Are the New Cathedrals</h2>
+
+      <div class="pull-quote">
+        <p>We do not merely enter game worlds. We inherit them — their history, their physics, their silently agreed-upon rules of beauty.</p>
+      </div>
+
+      <div class="editorial-body">
+        <p>There is a peculiar reverence that settles over a player the first time they crest a digital ridge and behold a horizon that was, moments ago, entirely inconceivable. This is not the suspension of disbelief cinema asks of its audience — this is something more active. The player has walked here. Every footstep was their own. And so the view belongs to them in a way no film frame ever could.</p>
+        <p>The greatest game studios understand this intuitively. Their art directors have more in common with architects than cinematographers — they design not images, but inhabited volumes of space and time. When we speak of the atmosphere of a game, we are speaking of a craft as old as the great cathedrals: the deliberate shaping of environment to produce an involuntary emotional response.</p>
+      </div>
+
+      <a href="#" class="read-more">Continue Reading →</a>
+    </div>
+  </div>
+</section>
+
+<!-- GEAR -->
+<section id="gear">
+  <div class="gear-header">
+    <div>
+      <div class="section-label">🛍️ The Collection</div>
+      <h2 class="section-title">Objects of <span class="c-blue">Distinction</span></h2>
+    </div>
+    <div class="editorial-meta">Limited Editions · Vault Members Only</div>
+  </div>
+
+  <div class="gear-grid" id="gearGrid">
+
+    <!-- Product 1 -->
+    <div class="product-card">
+      <div class="product-art">
+        <svg viewBox="0 0 380 215" xmlns="http://www.w3.org/2000/svg">
+          <rect width="380" height="215" fill="#16081A"/>
+          <defs>
+            <radialGradient id="pg1" cx="50%" cy="50%" r="68%">
+              <stop offset="0%" stop-color="#FF2D78" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#16081A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="380" height="215" fill="url(#pg1)"/>
+          <g transform="translate(78,18) scale(1.08)" fill="none" stroke-width="2.5">
+            <defs>
+              <linearGradient id="pg1ctrl" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF2D78"/>
+                <stop offset="100%" stop-color="#BF5AF2"/>
+              </linearGradient>
+            </defs>
+            <path d="M194,98 C194,73 177,55 154,55 L141,55 L137,38 L75,38 L71,55 L58,55 C35,55 18,73 18,98 L9,183 C3,218 27,240 58,240 C77,240 91,230 100,215 L120,177 C120,165 110,156 98,156 L90,156 L90,122 L122,122 L122,156 L114,156 L120,177 L120,215 C129,230 143,240 158,240 C189,240 213,218 207,183 Z"
+                  stroke="url(#pg1ctrl)" fill="#150520"/>
+            <rect x="42" y="117" width="20" height="7"  rx="3.5" fill="#FF2D78" stroke="none"/>
+            <rect x="48" y="111" width="7"  height="20" rx="3.5" fill="#FF2D78" stroke="none"/>
+            <circle cx="157" cy="117" r="10" fill="#A8FF3E" stroke="none"/>
+            <circle cx="172" cy="133" r="10" fill="#1BE7FF" stroke="none"/>
+            <circle cx="142" cy="133" r="10" fill="#FF9F1C" stroke="none"/>
+            <circle cx="157" cy="149" r="10" fill="#BF5AF2" stroke="none"/>
+            <text x="157" y="121" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">Y</text>
+            <text x="176" y="137" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">B</text>
+            <text x="138" y="137" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">X</text>
+            <text x="157" y="153" font-family="sans-serif" font-size="9" font-weight="900" fill="#0D0D1A" text-anchor="middle">A</text>
+          </g>
+          <ellipse cx="190" cy="192" rx="92" ry="12" fill="#FF2D78" opacity="0.1"/>
+        </svg>
+        <div class="product-edition">Limited · 500 Units</div>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">Peripherals</div>
+        <h3>Obsidian Controller Pro</h3>
+        <p>Hall-effect analogue sticks, zero-latency wireless, and bold colorways that actually slap. Comes in a velvet-lined case.</p>
+        <div class="product-footer">
+          <div class="product-price"><sub>USD</sub>489</div>
+          <button class="btn-vault">Add to Vault 🎮</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card">
+      <div class="product-art">
+        <svg viewBox="0 0 380 215" xmlns="http://www.w3.org/2000/svg">
+          <rect width="380" height="215" fill="#060E18"/>
+          <defs>
+            <radialGradient id="pg2" cx="50%" cy="44%" r="65%">
+              <stop offset="0%" stop-color="#1BE7FF" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#060E18" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="380" height="215" fill="url(#pg2)"/>
+          <g transform="translate(120,8)" fill="none">
+            <ellipse cx="120" cy="200" rx="75" ry="12" stroke="#1BE7FF" stroke-width="1.5" opacity="0.55"/>
+            <rect x="113" y="88" width="14" height="112" fill="#1BE7FF" opacity="0.45" rx="4"/>
+            <path d="M120,98 Q168,62 192,30"  stroke="#1BE7FF" stroke-width="2.2" opacity="0.85"/>
+            <path d="M120,98 Q72,62 48,30"    stroke="#1BE7FF" stroke-width="2.2" opacity="0.85"/>
+            <path d="M48,30 Q120,-4 192,30"   stroke="#1BE7FF" stroke-width="2.8" opacity="0.9"/>
+            <ellipse cx="46"  cy="38" rx="20" ry="24" fill="#1BE7FF" opacity="0.22" stroke="#1BE7FF" stroke-width="1.8"/>
+            <ellipse cx="194" cy="38" rx="20" ry="24" fill="#1BE7FF" opacity="0.22" stroke="#1BE7FF" stroke-width="1.8"/>
+            <circle cx="46"  cy="38" r="7" fill="#1BE7FF" opacity="0.6"/>
+            <circle cx="194" cy="38" r="7" fill="#1BE7FF" opacity="0.6"/>
+          </g>
+        </svg>
+        <div class="product-edition">Signature · 1200 Units</div>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">Desk Objects</div>
+        <h3>Helix Headset Sanctum</h3>
+        <p>Machined aluminium, weighted base, magnetic cable management. Turns your headset into a desk centrepiece worth showing off.</p>
+        <div class="product-footer">
+          <div class="product-price"><sub>USD</sub>219</div>
+          <button class="btn-vault">Add to Vault 🎧</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card">
+      <div class="product-art">
+        <svg viewBox="0 0 380 215" xmlns="http://www.w3.org/2000/svg">
+          <rect width="380" height="215" fill="#091408"/>
+          <defs>
+            <radialGradient id="pg3" cx="50%" cy="50%" r="62%">
+              <stop offset="0%" stop-color="#A8FF3E" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#091408" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect width="380" height="215" fill="url(#pg3)"/>
+          <g transform="translate(65,22)">
+            <rect x="0"   y="75" width="250" height="132" rx="12" fill="#0C1A0C" stroke="#A8FF3E" stroke-width="2.2" opacity="0.9"/>
+            <rect x="0"   y="22" width="250" height="58"  rx="12" fill="#071007" stroke="#A8FF3E" stroke-width="2.2" opacity="0.9"/>
+            <rect x="108" y="65" width="34"  height="18"  rx="7"  fill="none" stroke="#A8FF3E" stroke-width="2.2" opacity="0.9"/>
+            <rect x="116" y="70" width="18"  height="8"   rx="3"  fill="#A8FF3E" opacity="0.65"/>
+            <rect x="18"  y="95" width="214" height="95"  rx="7"  fill="#060D06" stroke="#1A2E1A" stroke-width="1"/>
+            <text x="85" y="160" font-family="sans-serif" font-size="38" fill="#A8FF3E" opacity="0.3" font-weight="900">VAULT</text>
+            <circle cx="13"  cy="35"  r="5.5" fill="#A8FF3E" opacity="0.75"/>
+            <circle cx="237" cy="35"  r="5.5" fill="#A8FF3E" opacity="0.75"/>
+            <circle cx="13"  cy="197" r="5.5" fill="#A8FF3E" opacity="0.75"/>
+            <circle cx="237" cy="197" r="5.5" fill="#A8FF3E" opacity="0.75"/>
+            <path d="M92,22 Q125,4 158,22" fill="none" stroke="#A8FF3E" stroke-width="3.5" stroke-linecap="round" opacity="0.75"/>
+          </g>
+        </svg>
+        <div class="product-edition">Bespoke · 250 Units</div>
+      </div>
+      <div class="product-body">
+        <div class="product-cat">Collector's Goods</div>
+        <h3>The Vault Carrying Case</h3>
+        <p>Custom-foam interior, rugged shell, personalised stamp. Built to carry what matters most — and look incredible doing it.</p>
+        <div class="product-footer">
+          <div class="product-price"><sub>USD</sub>375</div>
+          <button class="btn-vault">Add to Vault 🎒</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo" style="font-size:1.3rem">THE <span class="logo-dot"></span> VAULT</a>
+      <p>A vibrant collective for those who believe play is one of the great art forms of our time. Est. MMXXIV. 🎮</p>
+    </div>
+    <div class="footer-nav">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#games">Genres</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="#editorial">Editorial</a></li>
+        <li><a href="#gear">The Collection</a></li>
+      </ul>
+    </div>
+    <div class="footer-nav">
+      <h4>The Club</h4>
+      <ul>
+        <li><a href="#">Membership</a></li>
+        <li><a href="#">Apply to Join</a></li>
+        <li><a href="#">Vault Points</a></li>
+        <li><a href="#">Events</a></li>
+      </ul>
+    </div>
+    <div class="footer-nav">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">Manifesto</a></li>
+        <li><a href="#">Press & Media</a></li>
+        <li><a href="#">Partnerships</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 The Vault Gaming Culture · All Rights Reserved 💚</span>
+    <div class="social-row">
+      <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+      <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="#" aria-label="Twitch"><i class="fab fa-twitch"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* NAV SCROLL */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* COLORFUL PARTICLES */
+  const container = document.getElementById('heroParticles');
+  const colors = ['#FF2D78','#1BE7FF','#A8FF3E','#BF5AF2','#FF9F1C','#FF6FA8','#FFD700'];
+  for (let i = 0; i < 28; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    const size = (Math.random() * 6 + 3) + 'px';
+    p.style.width = p.style.height = size;
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.borderRadius = Math.random() > 0.45 ? '50%' : '3px';
+    const dur = (Math.random() * 13 + 7) + 's';
+    const delay = (Math.random() * 12) + 's';
+    p.style.animation = `particleFloat ${dur} ${delay} linear infinite`;
+    container.appendChild(p);
+  }
+
+  /* INTERSECTION OBSERVER */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.stat-item, .product-card').forEach((el, i) => {
+    el.style.transitionDelay = (i % 3) * 0.11 + 's';
+    io.observe(el);
+  });
+
+  /* GAME CARD STAGGER */
+  const gameCards = document.querySelectorAll('.game-card');
+  const gamesObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      gameCards.forEach((c, i) => setTimeout(() => c.classList.add('visible'), i * 90));
+      gamesObs.disconnect();
+    }
+  }, { threshold: 0.08 });
+  const gg = document.getElementById('gamesGrid');
+  if (gg) gamesObs.observe(gg);
+
+  /* PRODUCT CARD STAGGER */
+  const productCards = document.querySelectorAll('.product-card');
+  const gearObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      productCards.forEach((c, i) => setTimeout(() => c.classList.add('visible'), i * 130));
+      gearObs.disconnect();
+    }
+  }, { threshold: 0.08 });
+  const pg = document.getElementById('gearGrid');
+  if (pg) gearObs.observe(pg);
+
+  /* COUNTER ANIMATION */
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    (function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.innerHTML = Math.round(target * ease) + '<span class="stat-suffix">' + suffix + '</span>';
+      if (p < 1) requestAnimationFrame(tick);
+    })(start);
+  }
+
+  const statsObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.stat-num').forEach(animateCounter);
+        statsObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.35 });
+  const sg = document.getElementById('statsGrid');
+  if (sg) statsObs.observe(sg);
+
+  /* RIPPLE */
+  document.querySelectorAll('.btn-primary,.btn-ghost,.nav-cta,.btn-vault').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const r = document.createElement('span');
+      const rect = this.getBoundingClientRect();
+      r.style.cssText = `position:absolute;border-radius:50%;pointer-events:none;width:5px;height:5px;background:rgba(255,255,255,0.45);left:${e.clientX-rect.left}px;top:${e.clientY-rect.top}px;transform:scale(0);animation:ripA .55s ease-out forwards;`;
+      this.style.position='relative'; this.style.overflow='hidden';
+      this.appendChild(r);
+      setTimeout(() => r.remove(), 560);
+    });
+  });
+
+  const s = document.createElement('style');
+  s.textContent = '@keyframes ripA{to{transform:scale(72);opacity:0;}}';
+  document.head.appendChild(s);
+</script>
+</body>
+</html>
